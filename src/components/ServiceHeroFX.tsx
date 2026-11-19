@@ -30,7 +30,7 @@ const webDesign: Fx = (ctx, w, h, t) => {
     const x = ((t * (14 + i * 6) + i * 260) % (w + bw * 2)) - bw;
     const y = h * 0.16 + i * h * 0.16 + Math.sin(t * 0.7 + i * 1.4) * 12;
     ctx.strokeStyle = i % 2 ? SIGNAL : EMBER;
-    ctx.globalAlpha = 0.34;
+    ctx.globalAlpha = 0.55;
     ctx.lineWidth = 1.4;
     ctx.strokeRect(x, y, bw, bh);
     // title bar
@@ -72,7 +72,7 @@ const wordpress: Fx = (ctx, w, h, t) => {
         const a = (phase - 0.55) / 0.45;
         const pad = 8 * (1 - a);
         ctx.strokeStyle = (cx + cy) % 3 === 0 ? EMBER : SIGNAL;
-        ctx.globalAlpha = 0.3 * a;
+        ctx.globalAlpha = 0.5 * a;
         ctx.lineWidth = 1.4;
         ctx.strokeRect(cx * cell + pad, cy * cell + pad, cell - pad * 2, cell - pad * 2);
       }
@@ -94,11 +94,11 @@ const seo: Fx = (ctx, w, h, t) => {
     const bh = h * 0.5 * (target * 0.85 + 0.1 + wave);
     const x = x0 + i * (bw + gap);
     ctx.fillStyle = i === n - 1 ? EMBER : SIGNAL;
-    ctx.globalAlpha = i === n - 1 ? 0.75 : 0.28;
+    ctx.globalAlpha = i === n - 1 ? 0.9 : 0.45;
     ctx.fillRect(x, base - bh, bw, bh);
   }
   // trend line with arrow
-  ctx.globalAlpha = 0.85;
+  ctx.globalAlpha = 0.9;
   ctx.strokeStyle = EMBER;
   ctx.lineWidth = 2;
   ctx.beginPath();
@@ -136,7 +136,7 @@ const social: Fx = (ctx, w, h, t) => {
       const d = Math.hypot(dx, dy);
       if (d < w * 0.18) {
         ctx.strokeStyle = SIGNAL;
-        ctx.globalAlpha = 0.25 * (1 - d / (w * 0.18));
+        ctx.globalAlpha = 0.45 * (1 - d / (w * 0.18));
         ctx.beginPath();
         ctx.moveTo(pts[i][0], pts[i][1]);
         ctx.lineTo(pts[j][0], pts[j][1]);
@@ -165,14 +165,14 @@ const ppc: Fx = (ctx, w, h, t) => {
   ];
   spots.forEach(([x, y], i) => {
     const cycle = (t * 0.5 + i * 0.25) % 1;
-    ring(ctx, x, y, 8 + cycle * 90, 0.7 * (1 - cycle), i % 2 ? SIGNAL : EMBER, 2);
+    ring(ctx, x, y, 8 + cycle * 90, 0.9 * (1 - cycle), i % 2 ? SIGNAL : EMBER, 2);
     ring(ctx, x, y, 4, 0.9, EMBER, 2);
   });
   // drifting crosshair
   const cx = w * 0.72 + Math.sin(t * 0.6) * w * 0.12;
   const cy = h * 0.45 + Math.cos(t * 0.45) * h * 0.18;
   ctx.strokeStyle = EMBER;
-  ctx.globalAlpha = 0.65;
+  ctx.globalAlpha = 0.9;
   ctx.lineWidth = 1.6;
   ring(ctx, cx, cy, 16, 0.65);
   ctx.beginPath();
@@ -191,7 +191,7 @@ const branding: Fx = (ctx, w, h, t) => {
   for (let i = 0; i < 5; i++) {
     const r = 40 + i * 34;
     ctx.strokeStyle = i % 2 ? SIGNAL : EMBER;
-    ctx.globalAlpha = 0.4 - i * 0.05;
+    ctx.globalAlpha = 0.6 - i * 0.06;
     ctx.lineWidth = i === 0 ? 3 : 1.6;
     ctx.setLineDash([30 + i * 12, 18 + i * 8]);
     ctx.lineDashOffset = (i % 2 ? -1 : 1) * t * (22 + i * 9);
@@ -219,7 +219,7 @@ const photo: Fx = (ctx, w, h, t) => {
   const R = Math.min(w, h) * 0.3;
   const blades = 7;
   const open = 0.5 + 0.42 * Math.sin(t * 0.8); // 0.08 → 0.92
-  ring(ctx, cx, cy, R, 0.5, SIGNAL, 2);
+  ring(ctx, cx, cy, R, 0.75, SIGNAL, 2.5);
   ctx.strokeStyle = EMBER;
   ctx.lineWidth = 1.8;
   for (let i = 0; i < blades; i++) {
@@ -227,7 +227,7 @@ const photo: Fx = (ctx, w, h, t) => {
     const px = cx + Math.cos(a) * R;
     const py = cy + Math.sin(a) * R;
     const ta = a + Math.PI * (0.35 + open * 0.55);
-    ctx.globalAlpha = 0.6;
+    ctx.globalAlpha = 0.8;
     ctx.beginPath();
     ctx.moveTo(px, py);
     ctx.lineTo(cx + Math.cos(ta) * R * open, cy + Math.sin(ta) * R * open);
@@ -240,7 +240,7 @@ const photo: Fx = (ctx, w, h, t) => {
     const gy = cy + Math.sin(ga) * R * 1.25;
     const tw = (Math.sin(t * 3 + i * 2) + 1) / 2;
     ctx.fillStyle = EMBER;
-    ctx.globalAlpha = 0.7 * tw;
+    ctx.globalAlpha = 0.9 * tw;
     ctx.fillRect(gx - 1.5, gy - 1.5, 3, 3);
   }
   ctx.globalAlpha = 1;
@@ -278,9 +278,9 @@ function gear(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, te
 const maintenance: Fx = (ctx, w, h, t) => {
   const cx = w * 0.76;
   const cy = h * 0.45;
-  gear(ctx, cx, cy, 70, 10, t * 0.5, EMBER, 0.55);
-  gear(ctx, cx + 108, cy - 66, 46, 8, -t * 0.5 * (70 / 46) + 0.35, SIGNAL, 0.5);
-  gear(ctx, cx - 96, cy + 78, 36, 7, -t * 0.5 * (70 / 36) + 0.2, SIGNAL, 0.4);
+  gear(ctx, cx, cy, 70, 10, t * 0.5, EMBER, 0.8);
+  gear(ctx, cx + 108, cy - 66, 46, 8, -t * 0.5 * (70 / 46) + 0.35, SIGNAL, 0.75);
+  gear(ctx, cx - 96, cy + 78, 36, 7, -t * 0.5 * (70 / 36) + 0.2, SIGNAL, 0.6);
 };
 
 const FX_BY_SERVICE: Record<string, Fx> = {

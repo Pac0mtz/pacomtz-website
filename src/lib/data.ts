@@ -2,7 +2,7 @@ export const CONTACT = {
   name: 'Paco Martinez',
   brand: 'Paco Mtz',
   role: 'Web Developer & Designer',
-  city: 'Chicago, IL',
+  city: 'Cicero, Illinois',
   email: 'info@pacomtz.com',
   phone: '773-697-1975',
   phoneHref: 'tel:+17736971975',
