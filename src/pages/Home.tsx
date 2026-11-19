@@ -24,12 +24,15 @@ export default function Home() {
   return (
     <>
       {/* ——— HERO ——— */}
-      <section className="grid-texture relative flex min-h-[100dvh] flex-col justify-end overflow-hidden px-5 pb-0 pt-24 md:px-10 md:pt-28">
+      <section className="grid-texture relative flex min-h-[100dvh] flex-col overflow-hidden px-5 pb-0 pt-16 md:justify-end md:px-10 md:pt-28">
         <Suspense fallback={null}>
           <HeroScene />
         </Suspense>
         {/* diagonal slash signature */}
         <div className="pointer-events-none absolute -right-16 top-0 h-[46vh] w-16 rotate-[28deg] bg-[hsl(var(--ember))] md:w-24" aria-hidden="true" />
+
+        {/* mobile: reserved space for the 3D piece; desktop: hero sits right of headline */}
+        <div className="pointer-events-none h-[46dvh] md:hidden" aria-hidden="true" />
 
         <div className="pointer-events-none relative z-10 mx-auto w-full max-w-[1440px]">
           <p className="font-meta mb-6 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[hsl(var(--ember))]">
@@ -37,7 +40,7 @@ export default function Home() {
             <span className="text-[hsl(var(--paper))]/40" aria-hidden="true">·</span>
             <span>{CONTACT.city}</span>
           </p>
-          <h1 className="font-display text-[clamp(3.2rem,12vw,11rem)]">
+          <h1 className="font-display text-[clamp(3.2rem,16vw,11rem)]">
             <KineticLine>Paco</KineticLine>
             <KineticLine delay={0.12} className="text-[hsl(var(--ember))]">Mtz</KineticLine>
           </h1>
@@ -146,10 +149,14 @@ export default function Home() {
                 aria-label={`${p.title} — ${t('home.work.visit')}`}
               >
                 <div className="aspect-[4/3] w-full overflow-hidden transition-transform duration-500 group-hover:scale-[0.97]" style={{ background: p.palette.bg }}>
-                  <div className="flex h-full flex-col justify-between p-5">
-                    <div className="h-2 w-14" style={{ background: p.palette.accent }} />
-                    <span className="font-display text-xl uppercase leading-none md:text-2xl" style={{ color: p.palette.fg }}>{p.title}</span>
-                  </div>
+                  <img
+                    src={`/work/${p.id}.jpg`}
+                    alt=""
+                    loading="lazy"
+                    width={1200}
+                    height={900}
+                    className="h-full w-full object-cover object-top"
+                  />
                 </div>
                 <span className="font-meta mt-3 text-[hsl(var(--muted))]">{p.category}</span>
               </a>
