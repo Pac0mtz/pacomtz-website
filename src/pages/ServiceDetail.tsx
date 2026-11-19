@@ -1,23 +1,31 @@
 import { Link, Navigate, useParams } from 'react-router';
 import { useEffect } from 'react';
 import { CONTACT, SERVICES } from '../lib/data';
+import { SERVICES_ES } from '../lib/data-es';
+import { useLang } from '../lib/i18n';
 import { KineticLine, Reveal } from '../components/Reveal';
 import { Marquee } from '../components/Marquee';
 import { ServiceHeroFX } from '../components/ServiceHeroFX';
 
 export default function ServiceDetail() {
   const { serviceId } = useParams();
-  const service = SERVICES.find((s) => s.id === serviceId);
+  const { lang, t } = useLang();
+  const services = lang === 'es' ? SERVICES_ES : SERVICES;
+  const service = services.find((s) => s.id === serviceId);
 
   useEffect(() => {
-    if (service) document.title = `${service.title} in Chicago — Paco Mtz`;
-  }, [service]);
+    if (service) {
+      document.title = lang === 'es'
+        ? `${service.title} en Cicero y Chicago, IL — Paco Mtz`
+        : `${service.title} in Cicero & Chicago, IL — Paco Mtz`;
+    }
+  }, [service, lang]);
 
   if (!service) return <Navigate to="/services" replace />;
 
-  const idx = SERVICES.indexOf(service);
-  const prev = SERVICES[(idx - 1 + SERVICES.length) % SERVICES.length];
-  const next = SERVICES[(idx + 1) % SERVICES.length];
+  const idx = services.indexOf(service);
+  const prev = services[(idx - 1 + services.length) % services.length];
+  const next = services[(idx + 1) % services.length];
 
   return (
     <>
@@ -26,9 +34,9 @@ export default function ServiceDetail() {
         <ServiceHeroFX id={service.id} />
         <div className="relative z-10 mx-auto max-w-[1440px]">
           <Link to="/services" className="link-underline font-meta inline-flex min-h-[44px] items-center text-[hsl(var(--signal))]">
-            ← All services
+            {t('sd.back')}
           </Link>
-          <p className="font-meta mb-6 mt-8 text-[hsl(var(--ember))]">Service {service.index} / {String(SERVICES.length).padStart(2, '0')}</p>
+          <p className="font-meta mb-6 mt-8 text-[hsl(var(--ember))]">{t('sd.service')} {service.index} / {String(services.length).padStart(2, '0')}</p>
           <h1 className="font-display max-w-5xl text-[clamp(2.4rem,7vw,6rem)] normal-case">
             <KineticLine>{service.title}</KineticLine>
           </h1>
@@ -40,10 +48,10 @@ export default function ServiceDetail() {
           <Reveal delay={0.3}>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link to="/contact" className="inline-flex min-h-[48px] items-center bg-[hsl(var(--ember))] px-7 font-meta text-[hsl(var(--ink))] transition-colors hover:bg-[hsl(var(--paper))]">
-                Start a project
+                {t('sd.start')}
               </Link>
               <a href={CONTACT.phoneHref} className="inline-flex min-h-[48px] items-center border border-white/25 px-7 font-meta transition-colors hover:border-[hsl(var(--ember))] hover:text-[hsl(var(--ember))]">
-                Call {CONTACT.phone}
+                {t('sd.call')} {CONTACT.phone}
               </a>
             </div>
           </Reveal>
@@ -62,7 +70,7 @@ export default function ServiceDetail() {
           </div>
           <Reveal delay={0.15} className="md:col-span-5">
             <div className="border border-white/15 p-8">
-              <h2 className="font-meta mb-6 text-[hsl(var(--muted))]">What you get</h2>
+              <h2 className="font-meta mb-6 text-[hsl(var(--muted))]">{t('sd.get')}</h2>
               <ul className="space-y-4">
                 {service.deliverables.map((d) => (
                   <li key={d} className="flex items-center gap-3 text-base">
@@ -71,7 +79,7 @@ export default function ServiceDetail() {
                   </li>
                 ))}
               </ul>
-              <h2 className="font-meta mb-6 mt-10 text-[hsl(var(--muted))]">Outcomes</h2>
+              <h2 className="font-meta mb-6 mt-10 text-[hsl(var(--muted))]">{t('sd.outcomes')}</h2>
               <ul className="space-y-4">
                 {service.outcomes.map((o) => (
                   <li key={o} className="flex items-center gap-3 text-base text-[hsl(var(--ember))]">
@@ -91,7 +99,7 @@ export default function ServiceDetail() {
       <section className="border-t border-white/10 px-5 py-20 md:px-10" aria-labelledby="process-heading">
         <div className="mx-auto max-w-[1440px]">
           <Reveal>
-            <h2 id="process-heading" className="font-display text-[clamp(2rem,5vw,4rem)]">How it works</h2>
+            <h2 id="process-heading" className="font-display text-[clamp(2rem,5vw,4rem)]">{t('sd.process')}</h2>
           </Reveal>
           <div className="mt-12 grid gap-px bg-white/10 md:grid-cols-4">
             {service.process.map((p, i) => (
@@ -108,8 +116,8 @@ export default function ServiceDetail() {
       </section>
 
       {/* prev/next navigation */}
-      <nav aria-label="More services" className="border-t border-white/10">
-        <Marquee duration={40} className="border-b border-white/10 py-6" ariaLabel={`More services: ${prev.title}, ${next.title}`}>
+      <nav aria-label={t('sd.more')} className="border-t border-white/10">
+        <Marquee duration={40} className="border-b border-white/10 py-6" ariaLabel={`${t('sd.more')}: ${prev.title}, ${next.title}`}>
           {[prev, next, service].map((s, i) => (
             <Link key={i} to={`/services/${s.id}`} className="group flex items-center gap-5 px-8">
               <span className="font-meta text-[hsl(var(--muted))]">{s.index}</span>
@@ -122,11 +130,11 @@ export default function ServiceDetail() {
         </Marquee>
         <div className="mx-auto flex max-w-[1440px] items-stretch justify-between px-5 md:px-10">
           <Link to={`/services/${prev.id}`} className="group flex min-h-[72px] flex-1 flex-col justify-center border-r border-white/10 pr-4 py-4">
-            <span className="font-meta text-[hsl(var(--muted))]">← Previous</span>
+            <span className="font-meta text-[hsl(var(--muted))]">{t('sd.prev')}</span>
             <span className="font-display text-lg normal-case transition-colors group-hover:text-[hsl(var(--ember))] md:text-2xl">{prev.title}</span>
           </Link>
           <Link to={`/services/${next.id}`} className="group flex min-h-[72px] flex-1 flex-col items-end justify-center py-4 pl-4 text-right">
-            <span className="font-meta text-[hsl(var(--muted))]">Next →</span>
+            <span className="font-meta text-[hsl(var(--muted))]">{t('sd.next')}</span>
             <span className="font-display text-lg normal-case transition-colors group-hover:text-[hsl(var(--ember))] md:text-2xl">{next.title}</span>
           </Link>
         </div>

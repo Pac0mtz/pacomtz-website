@@ -1,5 +1,7 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import { CONTACT, EXPERIENCE, SKILLS } from '../lib/data';
+import { EXPERIENCE_ES, SKILLS_ES } from '../lib/data-es';
+import { useLang } from '../lib/i18n';
 import { KineticLine, Reveal } from '../components/Reveal';
 import { BrandGlyph, STACK } from '../components/BrandIcon';
 
@@ -25,13 +27,17 @@ function SkillBar({ name, level, delay }: { name: string; level: number; delay: 
 }
 
 export default function About() {
+  const { lang, t } = useLang();
+  const skills = lang === 'es' ? SKILLS_ES : SKILLS;
+  const experience = lang === 'es' ? EXPERIENCE_ES : EXPERIENCE;
+
   return (
     <>
       <section className="grid-texture px-5 pb-16 pt-36 md:px-10 md:pt-44">
         <div className="mx-auto max-w-[1440px]">
-          <p className="font-meta mb-6 text-[hsl(var(--ember))]">About me</p>
+          <p className="font-meta mb-6 text-[hsl(var(--ember))]">{t('about.kicker')}</p>
           <h1 className="font-display text-[clamp(2.6rem,9vw,8rem)]">
-            <KineticLine>Hi, I'm</KineticLine>
+            <KineticLine>{t('about.hi')}</KineticLine>
             <KineticLine delay={0.12} className="text-[hsl(var(--ember))]">Paco Martinez</KineticLine>
           </h1>
         </div>
@@ -41,23 +47,23 @@ export default function About() {
         <div className="mx-auto grid max-w-[1440px] gap-12 md:grid-cols-5 md:gap-16">
           <Reveal className="md:col-span-3">
             <h2 className="font-display text-3xl normal-case md:text-4xl">
-              A web developer &amp; designer from Chicago
+              {t('about.role')}
             </h2>
             <p className="mt-6 max-w-[65ch] text-lg leading-[1.7] text-[hsl(var(--paper))]/90">
-              With {CONTACT.years} years of experience, I build websites the way they should be built — by hand, end to end. Front-end and back-end development, WordPress sites for restaurants &amp; online ordering, e-commerce, landing pages and custom web apps, all live and performing.
+              {t('about.p1')}
             </p>
             <p className="mt-5 max-w-[65ch] text-lg leading-[1.7] text-[hsl(var(--paper))]/90">
-              I've spent most of these years working across different areas of design like front-end &amp; back-end development, building WordPress websites for restaurants &amp; online ordering sites, landing pages and more. Having worked on various projects that are already live, I can help you with the best possible suggestions and ideas to proceed with.
+              {t('about.p2')}
             </p>
             <p className="mt-5 max-w-[65ch] text-lg leading-[1.7] text-[hsl(var(--paper))]/90">
-              With me, you aren't forced to accept anything. I give you a variety of options we can work on together.
+              {t('about.p3')}
             </p>
           </Reveal>
 
           <Reveal delay={0.15} className="md:col-span-2">
-            <h2 className="font-meta mb-8 text-[hsl(var(--muted))]">Skills</h2>
+            <h2 className="font-meta mb-8 text-[hsl(var(--muted))]">{t('about.skills')}</h2>
             <div className="space-y-7">
-              {SKILLS.map((s, i) => (
+              {skills.map((s, i) => (
                 <SkillBar key={s.name} name={s.name} level={s.level} delay={i * 0.1} />
               ))}
             </div>
@@ -69,10 +75,10 @@ export default function About() {
       <section className="border-t border-white/10 px-5 py-24 md:px-10" aria-labelledby="exp-heading">
         <div className="mx-auto max-w-[1440px]">
           <Reveal>
-            <h2 id="exp-heading" className="font-display text-[clamp(2rem,5vw,4rem)]">Experience</h2>
+            <h2 id="exp-heading" className="font-display text-[clamp(2rem,5vw,4rem)]">{t('about.exp')}</h2>
           </Reveal>
           <div className="mt-12 grid gap-px bg-white/10 md:grid-cols-2">
-            {EXPERIENCE.map((e, i) => (
+            {experience.map((e, i) => (
               <Reveal key={e.role} delay={i * 0.12}>
                 <article className="h-full bg-[hsl(var(--ink))] p-8 md:p-12">
                   <p className="font-meta text-[hsl(var(--ember))]">{e.period}</p>
@@ -89,8 +95,8 @@ export default function About() {
       <section className="border-t border-white/10 px-5 py-24 md:px-10" aria-labelledby="stack-heading">
         <div className="mx-auto max-w-[1440px]">
           <Reveal>
-            <p className="font-meta mb-4 text-[hsl(var(--ember))]">My toolbox</p>
-            <h2 id="stack-heading" className="font-display text-[clamp(2rem,5vw,4rem)]">Tools &amp; stack</h2>
+            <p className="font-meta mb-4 text-[hsl(var(--ember))]">{t('about.toolbox')}</p>
+            <h2 id="stack-heading" className="font-display text-[clamp(2rem,5vw,4rem)]">{t('about.stack')}</h2>
           </Reveal>
           <ul className="mt-12 grid grid-cols-2 gap-px bg-white/10 sm:grid-cols-3 lg:grid-cols-5">
             {STACK.map((s, i) => (
@@ -106,12 +112,12 @@ export default function About() {
       </section>
 
       {/* big numbers */}
-      <section className="px-5 pb-28 md:px-10" aria-label="Quick facts">
+      <section className="px-5 pb-28 md:px-10" aria-label={t('about.facts')}>
         <div className="mx-auto grid max-w-[1440px] gap-10 md:grid-cols-3">
           {[
-            { n: `${CONTACT.years}+`, label: 'Years of experience' },
-            { n: '50+', label: 'Projects delivered live' },
-            { n: '5★', label: 'Maximum client ratings' },
+            { n: `${CONTACT.years}+`, label: t('about.f1') },
+            { n: '50+', label: t('about.f2') },
+            { n: '5★', label: t('about.f3') },
           ].map((f, i) => (
             <Reveal key={f.label} delay={i * 0.1}>
               <div className="border-t-2 border-[hsl(var(--ember))] pt-6">
