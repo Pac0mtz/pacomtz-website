@@ -1,47 +1,28 @@
 import type { Project } from '../lib/data';
 
-/** Code-drawn browser mockup artwork per project — no external images, always crisp. */
+/** Real live-site screenshot framed as a browser window. */
 function Mockup({ p }: { p: Project }) {
-  const { bg, fg, accent } = p.palette;
+  const { fg, accent } = p.palette;
   const domain = p.url.replace(/^https?:\/\//, '');
   return (
-    <div className="relative aspect-[4/3] w-full overflow-hidden" style={{ background: bg }} aria-hidden="true">
+    <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#0a0a0a]" aria-hidden="true">
       {/* browser chrome */}
-      <div className="flex items-center gap-1.5 border-b px-4 py-2.5" style={{ borderColor: `${fg}22` }}>
-        <span className="h-2 w-2 rounded-full" style={{ background: `${fg}33` }} />
-        <span className="h-2 w-2 rounded-full" style={{ background: `${fg}33` }} />
+      <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-2.5">
+        <span className="h-2 w-2 rounded-full bg-white/15" />
+        <span className="h-2 w-2 rounded-full bg-white/15" />
         <span className="h-2 w-2 rounded-full" style={{ background: accent }} />
-        <span className="font-meta ml-3 flex h-5 flex-1 items-center truncate rounded-full px-3 text-[10px] normal-case tracking-normal" style={{ background: `${fg}14`, color: `${fg}aa` }}>
+        <span className="font-meta ml-3 flex h-5 flex-1 items-center truncate rounded-full bg-white/10 px-3 text-[10px] normal-case tracking-normal" style={{ color: `${fg}aa` }}>
           {domain}
         </span>
       </div>
-      {/* page composition */}
-      <div className="flex h-[calc(100%-38px)] flex-col justify-between p-5 md:p-7">
-        <div>
-          <div className="mb-3 h-2 w-16" style={{ background: accent }} />
-          <div
-            className="font-display uppercase leading-[0.95]"
-            style={{ color: fg, fontSize: 'clamp(1.3rem, 6vw, 2.6rem)' }}
-          >
-            {p.title}
-          </div>
-          <div className="mt-3 space-y-1.5">
-            <div className="h-1.5 w-3/4" style={{ background: `${fg}2e` }} />
-            <div className="h-1.5 w-1/2" style={{ background: `${fg}2e` }} />
-          </div>
-        </div>
-        <div className="flex items-end justify-between">
-          <div className="flex gap-2">
-            <div className="h-7 w-24" style={{ background: accent }} />
-            <div className="h-7 w-20 border" style={{ borderColor: `${fg}44` }} />
-          </div>
-          <div className="font-meta" style={{ color: `${fg}66` }}>{p.year}</div>
-        </div>
-      </div>
-      {/* diagonal slash signature */}
-      <div
-        className="absolute -right-10 -top-16 h-48 w-10 rotate-[28deg] opacity-90"
-        style={{ background: accent }}
+      {/* real screenshot */}
+      <img
+        src={`/work/${p.id}.jpg`}
+        alt=""
+        loading="lazy"
+        width={1200}
+        height={900}
+        className="h-[calc(100%-38px)] w-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
     </div>
   );
