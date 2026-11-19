@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { CONTACT, SERVICES } from '../lib/data';
 import { KineticLine, Reveal } from '../components/Reveal';
 import { Marquee } from '../components/Marquee';
+import { ServiceHeroFX } from '../components/ServiceHeroFX';
 
 export default function ServiceDetail() {
   const { serviceId } = useParams();
@@ -21,8 +22,9 @@ export default function ServiceDetail() {
   return (
     <>
       {/* hero */}
-      <section className="grid-texture px-5 pb-14 pt-36 md:px-10 md:pt-44">
-        <div className="mx-auto max-w-[1440px]">
+      <section className="grid-texture relative overflow-hidden px-5 pb-14 pt-36 md:px-10 md:pt-44">
+        <ServiceHeroFX id={service.id} />
+        <div className="relative z-10 mx-auto max-w-[1440px]">
           <Link to="/services" className="link-underline font-meta inline-flex min-h-[44px] items-center text-[hsl(var(--signal))]">
             ← All services
           </Link>
