@@ -2,30 +2,34 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SERVICES } from '../lib/data';
+import { SERVICES_ES } from '../lib/data-es';
+import { useLang } from '../lib/i18n';
 import { KineticLine, Reveal } from '../components/Reveal';
 
 export default function Services() {
-  const [open, setOpen] = useState<string | null>(SERVICES[0].id);
+  const { lang, t } = useLang();
+  const services = lang === 'es' ? SERVICES_ES : SERVICES;
+  const [open, setOpen] = useState<string | null>(services[0].id);
 
   return (
     <>
       <section className="grid-texture px-5 pb-16 pt-36 md:px-10 md:pt-44">
         <div className="mx-auto max-w-[1440px]">
-          <p className="font-meta mb-6 text-[hsl(var(--ember))]">What I do</p>
+          <p className="font-meta mb-6 text-[hsl(var(--ember))]">{t('services.kicker')}</p>
           <h1 className="font-display text-[clamp(3rem,10vw,9rem)]">
-            <KineticLine>Services</KineticLine>
+            <KineticLine>{t('services.title')}</KineticLine>
           </h1>
           <Reveal delay={0.2}>
             <p className="mt-8 max-w-xl text-lg leading-relaxed text-[hsl(var(--paper))]/90">
-              From understanding your requirements, designing a blueprint and delivering the final product — everything that falls in between.
+              {t('services.intro')}
             </p>
           </Reveal>
         </div>
       </section>
 
-      <section className="px-5 pb-28 md:px-10" aria-label="Service list">
+      <section className="px-5 pb-28 md:px-10" aria-label={t('services.list')}>
         <div className="mx-auto max-w-[1440px] divide-y divide-white/10 border-y border-white/10">
-          {SERVICES.map((s, i) => {
+          {services.map((s, i) => {
             const isOpen = open === s.id;
             return (
               <Reveal key={s.id} delay={i * 0.04}>
@@ -75,7 +79,7 @@ export default function Services() {
                                 to={`/services/${s.id}`}
                                 className="link-underline font-meta inline-flex min-h-[44px] items-center text-[hsl(var(--signal))]"
                               >
-                                Full service page →
+                                {t('services.full')}
                               </Link>
                             </li>
                           </ul>

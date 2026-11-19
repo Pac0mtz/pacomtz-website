@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import { Link } from 'react-router';
 import { CONTACT, PROJECTS, SERVICES } from '../lib/data';
+import { PROJECTS_ES, SERVICES_ES } from '../lib/data-es';
+import { useLang } from '../lib/i18n';
 import { Marquee } from '../components/Marquee';
 import { KineticLine, Reveal } from '../components/Reveal';
 import { ProjectCard } from '../components/ProjectCard';
@@ -8,11 +10,16 @@ import { BrandGlyph, STACK } from '../components/BrandIcon';
 
 const HeroScene = lazy(() => import('../components/HeroScene').then((m) => ({ default: m.HeroScene })));
 
-const TICKER_WORDS = ['Web Development', 'React', 'WordPress', 'UI/UX Design', 'SEO', 'E-Commerce', 'Performance', 'Accessibility'];
-
 export default function Home() {
-  const featured = PROJECTS.filter((p) => p.featured);
-  const rest = PROJECTS.filter((p) => !p.featured);
+  const { lang, t } = useLang();
+  const services = lang === 'es' ? SERVICES_ES : SERVICES;
+  const projects = lang === 'es' ? PROJECTS_ES : PROJECTS;
+  const featured = projects.filter((p) => p.featured);
+  const rest = projects.filter((p) => !p.featured);
+
+  const TICKER_WORDS = lang === 'es'
+    ? ['Desarrollo Web', 'React', 'WordPress', 'Diseño UI/UX', 'SEO', 'E-Commerce', 'Rendimiento', 'Accesibilidad']
+    : ['Web Development', 'React', 'WordPress', 'UI/UX Design', 'SEO', 'E-Commerce', 'Performance', 'Accessibility'];
 
   return (
     <>
@@ -37,7 +44,7 @@ export default function Home() {
           <div className="mt-7 flex flex-col gap-6 pb-9 md:mt-8 md:flex-row md:items-end md:justify-between md:pb-10">
             <Reveal delay={0.25}>
               <p className="max-w-md text-base leading-relaxed text-[hsl(var(--paper))]/90 md:text-lg">
-                I build <em className="font-display normal-case italic">fast, hand-crafted websites</em> — {CONTACT.years}+ years turning ideas into code that grows businesses.
+                {t('home.hero.copy')}
               </p>
             </Reveal>
             <Reveal delay={0.35} className="pointer-events-auto flex flex-wrap gap-4">
@@ -45,20 +52,20 @@ export default function Home() {
                 to="/contact"
                 className="inline-flex min-h-[48px] items-center bg-[hsl(var(--ember))] px-7 font-meta text-[hsl(var(--ink))] transition-colors hover:bg-[hsl(var(--paper))]"
               >
-                Start a project
+                {t('home.hero.start')}
               </Link>
               <Link
                 to="/work"
                 className="inline-flex min-h-[48px] items-center border border-white/25 px-7 font-meta transition-colors hover:border-[hsl(var(--ember))] hover:text-[hsl(var(--ember))]"
               >
-                View work
+                {t('home.hero.work')}
               </Link>
             </Reveal>
           </div>
 
           {/* tech stack — branded icons */}
           <Reveal delay={0.45}>
-            <ul className="flex flex-wrap items-center gap-x-6 gap-y-4 pb-8 md:gap-x-7 md:pb-10" aria-label="Technologies I build with">
+            <ul className="flex flex-wrap items-center gap-x-6 gap-y-4 pb-8 md:gap-x-7 md:pb-10" aria-label={t('home.hero.stack')}>
               {STACK.slice(0, 10).map((s) => (
                 <li key={s.label} className="group flex items-center gap-2 text-[hsl(var(--paper))]/55 transition-colors duration-300 hover:text-[hsl(var(--ember))]" title={s.label}>
                   <BrandGlyph item={s} size={19} />
@@ -71,7 +78,7 @@ export default function Home() {
 
         {/* ticker */}
         <div className="border-t border-white/10">
-          <Marquee duration={30} ariaLabel="Services ticker">
+          <Marquee duration={30} ariaLabel={t('home.ticker')}>
             {TICKER_WORDS.map((w) => (
               <span key={w} className="flex items-center">
                 <span className="font-display whitespace-nowrap px-6 py-5 text-2xl text-[hsl(var(--paper))]/85 md:text-3xl">{w}</span>
@@ -86,20 +93,20 @@ export default function Home() {
       <section className="px-5 py-20 md:px-10 md:py-36">
         <div className="mx-auto grid max-w-[1440px] gap-10 md:grid-cols-5 md:gap-16">
           <Reveal className="md:col-span-2">
-            <p className="font-meta mb-4 text-[hsl(var(--ember))]">Why me</p>
+            <p className="font-meta mb-4 text-[hsl(var(--ember))]">{t('home.why.kicker')}</p>
             <h2 className="font-display text-[clamp(2rem,5vw,4.2rem)]">
-              Websites that work as good as they look
+              {t('home.why.title')}
             </h2>
           </Reveal>
           <Reveal delay={0.15} className="md:col-span-3">
             <p className="max-w-[65ch] text-lg leading-[1.7] text-[hsl(var(--paper))]/90">
-              I'm a web developer &amp; designer from Chicago. For {CONTACT.years} years I've been hand-crafting websites end to end — front-end and back-end development, WordPress builds for restaurants, e-commerce and online ordering, landing pages and custom React apps.
+              {t('home.why.p1')}
             </p>
             <p className="mt-5 max-w-[65ch] text-lg leading-[1.7] text-[hsl(var(--paper))]/90">
-              No bloated templates. Every build is responsive, fast, accessible and SEO-ready from the first line of code — with options we shape together, from the first blueprint to the final deploy.
+              {t('home.why.p2')}
             </p>
             <Link to="/about" className="link-underline mt-8 inline-flex min-h-[44px] items-center font-meta text-[hsl(var(--signal))]">
-              More about me →
+              {t('home.why.more')}
             </Link>
           </Reveal>
         </div>
@@ -109,11 +116,11 @@ export default function Home() {
       <section className="border-y border-white/10 py-20 md:py-28" aria-labelledby="work-heading">
         <div className="mx-auto mb-12 flex max-w-[1440px] items-end justify-between px-5 md:px-10">
           <Reveal>
-            <h2 id="work-heading" className="font-display text-[clamp(2.2rem,6vw,5rem)]">Selected work</h2>
+            <h2 id="work-heading" className="font-display text-[clamp(2.2rem,6vw,5rem)]">{t('home.work.title')}</h2>
           </Reveal>
           <Reveal delay={0.1}>
             <Link to="/work" className="link-underline hidden min-h-[44px] items-center font-meta text-[hsl(var(--signal))] md:inline-flex">
-              All projects →
+              {t('home.work.all')}
             </Link>
           </Reveal>
         </div>
@@ -128,7 +135,7 @@ export default function Home() {
 
         {/* infinite scrolling strip of the remaining projects */}
         <div className="mt-16">
-          <Marquee duration={46} className="border-y border-white/10 py-8" ariaLabel="More projects">
+          <Marquee duration={46} className="border-y border-white/10 py-8" ariaLabel={t('home.work.more')}>
             {rest.map((p) => (
               <a
                 key={p.id}
@@ -136,7 +143,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group mx-4 flex w-[240px] shrink-0 flex-col md:mx-6 md:w-[300px]"
-                aria-label={`${p.title} — visit live site (opens in new tab)`}
+                aria-label={`${p.title} — ${t('home.work.visit')}`}
               >
                 <div className="aspect-[4/3] w-full overflow-hidden transition-transform duration-500 group-hover:scale-[0.97]" style={{ background: p.palette.bg }}>
                   <div className="flex h-full flex-col justify-between p-5">
@@ -155,19 +162,19 @@ export default function Home() {
       <section className="bg-[hsl(var(--ember))] px-5 py-24 text-[hsl(var(--ink))] md:px-10 md:py-36" aria-labelledby="cta-heading">
         <div className="mx-auto max-w-[1440px] text-center">
           <h2 id="cta-heading" className="font-display text-[clamp(2.6rem,10vw,9rem)]">
-            <KineticLine>Let's build</KineticLine>
-            <KineticLine delay={0.12}>something great</KineticLine>
+            <KineticLine>{t('home.cta.title1')}</KineticLine>
+            <KineticLine delay={0.12}>{t('home.cta.title2')}</KineticLine>
           </h2>
           <Reveal delay={0.2}>
             <p className="mx-auto mt-8 max-w-xl text-lg font-normal leading-relaxed">
-              One call. One email. That's all it takes to get a website that actually grows your business.
+              {t('home.cta.text')}
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <a
                 href={CONTACT.phoneHref}
                 className="inline-flex min-h-[52px] items-center bg-[hsl(var(--ink))] px-8 font-meta text-[hsl(var(--paper))] transition-transform duration-200 hover:scale-[1.03]"
               >
-                Call {CONTACT.phone}
+                {t('sd.call')} {CONTACT.phone}
               </a>
               <a
                 href={`mailto:${CONTACT.email}`}
@@ -184,17 +191,17 @@ export default function Home() {
       <section className="px-5 py-24 md:px-10 md:py-36" aria-labelledby="services-heading">
         <div className="mx-auto max-w-[1440px]">
           <Reveal>
-            <p className="font-meta mb-4 text-[hsl(var(--ember))]">What I do</p>
-            <h2 id="services-heading" className="font-display text-[clamp(2.2rem,6vw,5rem)]">Services</h2>
+            <p className="font-meta mb-4 text-[hsl(var(--ember))]">{t('home.services.kicker')}</p>
+            <h2 id="services-heading" className="font-display text-[clamp(2.2rem,6vw,5rem)]">{t('home.services.title')}</h2>
           </Reveal>
           <ul className="mt-14 divide-y divide-white/10 border-y border-white/10">
-            {SERVICES.slice(0, 6).map((s, i) => (
+            {services.slice(0, 6).map((s, i) => (
               <Reveal key={s.id} delay={i * 0.05}>
                 <li>
                   <Link
                     to={`/services/${s.id}`}
                     className="group flex min-h-[72px] items-baseline gap-6 py-6 transition-colors md:gap-12 md:py-8"
-                    aria-label={`${s.title} — see service details`}
+                    aria-label={`${s.title} — ${t('home.services.see')}`}
                   >
                     <span className="font-meta text-[hsl(var(--muted))]">{s.index}</span>
                     <span className="font-display flex-1 text-2xl normal-case transition-colors group-hover:text-[hsl(var(--ember))] md:text-4xl">
@@ -209,7 +216,7 @@ export default function Home() {
           </ul>
           <Reveal delay={0.15}>
             <Link to="/services" className="link-underline mt-10 inline-flex min-h-[44px] items-center font-meta text-[hsl(var(--signal))]">
-              All {SERVICES.length} services →
+              {t('home.services.all').replace('{n}', String(services.length))}
             </Link>
           </Reveal>
         </div>
