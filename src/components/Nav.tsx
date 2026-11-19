@@ -1,12 +1,45 @@
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CONTACT, NAV_LINKS } from '../lib/data';
+import { CONTACT } from '../lib/data';
+import { useLang } from '../lib/i18n';
+
+function LangToggle({ className = '' }: { className?: string }) {
+  const { lang, setLang } = useLang();
+  return (
+    <div className={`flex items-center border border-white/20 font-meta ${className}`} role="group" aria-label="Language / Idioma">
+      {(['en', 'es'] as const).map((l) => (
+        <button
+          key={l}
+          type="button"
+          onClick={() => setLang(l)}
+          aria-pressed={lang === l}
+          className={`inline-flex min-h-[36px] min-w-[40px] items-center justify-center px-2 uppercase transition-colors ${
+            lang === l
+              ? 'bg-[hsl(var(--ember))] text-[hsl(var(--ink))]'
+              : 'text-[hsl(var(--paper))]/70 hover:text-[hsl(var(--ember))]'
+          }`}
+        >
+          {l}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { t } = useLang();
+
+  const LINKS = [
+    { to: '/', label: t('nav.home') },
+    { to: '/work', label: t('nav.work') },
+    { to: '/services', label: t('nav.services') },
+    { to: '/about', label: t('nav.about') },
+    { to: '/contact', label: t('nav.contact') },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -43,7 +76,7 @@ export function Nav() {
 
         {/* Desktop nav */}
         <ul className="hidden items-center gap-8 md:flex">
-          {NAV_LINKS.map((l) => (
+          {LINKS.map((l) => (
             <li key={l.to}>
               <NavLink
                 to={l.to}
@@ -58,6 +91,9 @@ export function Nav() {
             </li>
           ))}
           <li>
+            <LangToggle />
+          </li>
+          <li>
             <a
               href={CONTACT.phoneHref}
               className="font-meta inline-flex min-h-[44px] items-center border border-[hsl(var(--ember))] px-4 text-[hsl(var(--ember))] transition-colors hover:bg-[hsl(var(--ember))] hover:text-[hsl(var(--ink))]"
@@ -67,21 +103,24 @@ export function Nav() {
           </li>
         </ul>
 
-        {/* Mobile toggle */}
-        <button
-          type="button"
-          className="flex min-h-[44px] min-w-[44px] items-center justify-center md:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="relative block h-4 w-6">
-            <span className={`absolute left-0 top-0 block h-0.5 w-6 bg-[hsl(var(--paper))] transition-transform duration-300 ${open ? 'translate-y-[7px] rotate-45' : ''}`} />
-            <span className={`absolute left-0 top-[7px] block h-0.5 w-6 bg-[hsl(var(--paper))] transition-opacity duration-200 ${open ? 'opacity-0' : ''}`} />
-            <span className={`absolute left-0 top-[14px] block h-0.5 w-6 bg-[hsl(var(--paper))] transition-transform duration-300 ${open ? '-translate-y-[7px] -rotate-45' : ''}`} />
-          </span>
-        </button>
+        {/* Mobile: lang toggle + burger */}
+        <div className="flex items-center gap-3 md:hidden">
+          <LangToggle />
+          <button
+            type="button"
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? t('nav.menu.close') : t('nav.menu.open')}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="relative block h-4 w-6">
+              <span className={`absolute left-0 top-0 block h-0.5 w-6 bg-[hsl(var(--paper))] transition-transform duration-300 ${open ? 'translate-y-[7px] rotate-45' : ''}`} />
+              <span className={`absolute left-0 top-[7px] block h-0.5 w-6 bg-[hsl(var(--paper))] transition-opacity duration-200 ${open ? 'opacity-0' : ''}`} />
+              <span className={`absolute left-0 top-[14px] block h-0.5 w-6 bg-[hsl(var(--paper))] transition-transform duration-300 ${open ? '-translate-y-[7px] -rotate-45' : ''}`} />
+            </span>
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
@@ -96,7 +135,7 @@ export function Nav() {
             className="border-b border-white/10 bg-[hsl(var(--ink))] md:hidden"
           >
             <ul className="flex flex-col px-5 pb-6 pt-2">
-              {NAV_LINKS.map((l) => (
+              {LINKS.map((l) => (
                 <li key={l.to}>
                   <NavLink
                     to={l.to}
@@ -115,7 +154,7 @@ export function Nav() {
                   href={CONTACT.phoneHref}
                   className="flex min-h-[48px] items-center justify-center border border-[hsl(var(--ember))] font-meta text-[hsl(var(--ember))]"
                 >
-                  Call {CONTACT.phone}
+                  {t('nav.call')} {CONTACT.phone}
                 </a>
               </li>
             </ul>

@@ -4,6 +4,8 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import Lenis from 'lenis';
 import { Nav } from './components/Nav';
 import { Footer } from './components/Footer';
+import { LanguageGate } from './components/LanguageGate';
+import { LanguageProvider, useLang } from './lib/i18n';
 import Home from './pages/Home';
 import Work from './pages/Work';
 import Services from './pages/Services';
@@ -11,21 +13,37 @@ import ServiceDetail from './pages/ServiceDetail';
 import About from './pages/About';
 import Contact from './pages/Contact';
 
-const TITLES: Record<string, string> = {
-  '/': 'Paco Mtz — Web Developer & Designer in Chicago',
-  '/work': 'Web Development Work & Portfolio — Paco Mtz',
-  '/services': 'Web Development, WordPress & SEO Services — Paco Mtz',
-  '/about': 'About Paco Martinez — Web Developer in Chicago',
-  '/contact': 'Contact — Paco Mtz | Chicago Web Developer',
+const TITLES: Record<string, { en: string; es: string }> = {
+  '/': {
+    en: 'Paco Mtz — Web Developer & Designer in Cicero, IL & Chicago',
+    es: 'Paco Mtz — Desarrollador Web y Diseñador en Cicero, IL y Chicago',
+  },
+  '/work': {
+    en: 'Web Development Work & Portfolio — Cicero & Chicago, IL — Paco Mtz',
+    es: 'Portafolio de Desarrollo Web — Cicero y Chicago, IL — Paco Mtz',
+  },
+  '/services': {
+    en: 'Web Development, WordPress & SEO Services in Cicero & Chicago, IL — Paco Mtz',
+    es: 'Servicios de Desarrollo Web, WordPress y SEO en Cicero y Chicago, IL — Paco Mtz',
+  },
+  '/about': {
+    en: 'About Paco Martinez — Web Developer in Cicero, Illinois',
+    es: 'Sobre Paco Martinez — Desarrollador Web en Cicero, Illinois',
+  },
+  '/contact': {
+    en: 'Contact — Paco Mtz | Web Developer in Cicero & Chicago, IL',
+    es: 'Contacto — Paco Mtz | Desarrollador Web en Cicero y Chicago, IL',
+  },
 };
 
 function ScrollManager() {
   const { pathname } = useLocation();
+  const { lang } = useLang();
   useEffect(() => {
     const title = TITLES[pathname];
-    if (title) document.title = title; // service detail pages set their own title
+    if (title) document.title = title[lang]; // service detail pages set their own title
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, lang]);
   return null;
 }
 
@@ -46,7 +64,7 @@ function useLenis() {
   }, []);
 }
 
-export default function App() {
+function Shell() {
   const location = useLocation();
   const reduce = useReducedMotion();
   useLenis();
@@ -54,6 +72,7 @@ export default function App() {
   return (
     <div className="flex min-h-[100dvh] flex-col">
       <ScrollManager />
+      <LanguageGate />
       <Nav />
       <AnimatePresence mode="wait" initial={false}>
         <motion.main
@@ -77,5 +96,13 @@ export default function App() {
       </AnimatePresence>
       <Footer />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <Shell />
+    </LanguageProvider>
   );
 }

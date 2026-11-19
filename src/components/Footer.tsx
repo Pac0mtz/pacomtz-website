@@ -1,12 +1,22 @@
 import { Link } from 'react-router';
-import { CONTACT, NAV_LINKS } from '../lib/data';
+import { CONTACT } from '../lib/data';
+import { useLang } from '../lib/i18n';
 import { Marquee } from './Marquee';
 
 export function Footer() {
+  const { t } = useLang();
+  const LINKS = [
+    { to: '/', label: t('nav.home') },
+    { to: '/work', label: t('nav.work') },
+    { to: '/services', label: t('nav.services') },
+    { to: '/about', label: t('nav.about') },
+    { to: '/contact', label: t('nav.contact') },
+  ];
+
   return (
     <footer className="border-t border-white/10 bg-[#050505]">
       {/* CTA ribbon */}
-      <Marquee duration={28} ariaLabel="Let's work together">
+      <Marquee duration={28} ariaLabel={t('footer.cta')}>
         {[0, 1, 2].map((i) => (
           <Link
             key={i}
@@ -14,7 +24,7 @@ export function Footer() {
             className="group flex items-center gap-6 px-8 py-8 md:py-10"
           >
             <span className="font-display whitespace-nowrap text-3xl text-[hsl(var(--ember))] transition-transform duration-300 group-hover:-skew-x-6 md:text-5xl">
-              Let's work together
+              {t('footer.cta')}
             </span>
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="shrink-0 text-[hsl(var(--ember))] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
               <path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -27,13 +37,13 @@ export function Footer() {
         <div>
           <p className="font-display text-2xl">Paco Mtz</p>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-[hsl(var(--muted))]">
-            {CONTACT.role} based in {CONTACT.city}. {CONTACT.years}+ years crafting websites, brands and campaigns that grow businesses.
+            {CONTACT.role} {t('footer.blurb')}
           </p>
         </div>
         <nav aria-label="Footer">
-          <p className="font-meta mb-4 text-[hsl(var(--muted))]">Sitemap</p>
+          <p className="font-meta mb-4 text-[hsl(var(--muted))]">{t('footer.sitemap')}</p>
           <ul className="grid grid-cols-2 gap-x-6">
-            {NAV_LINKS.map((l) => (
+            {LINKS.map((l) => (
               <li key={l.to}>
                 <Link to={l.to} className="link-underline inline-flex min-h-[36px] items-center text-sm text-[hsl(var(--paper))]">
                   {l.label}
@@ -43,7 +53,7 @@ export function Footer() {
           </ul>
         </nav>
         <div>
-          <p className="font-meta mb-4 text-[hsl(var(--muted))]">Contact</p>
+          <p className="font-meta mb-4 text-[hsl(var(--muted))]">{t('footer.contact')}</p>
           <ul className="space-y-2 text-sm">
             <li>
               <a href={`mailto:${CONTACT.email}`} className="link-underline inline-flex min-h-[36px] items-center text-[hsl(var(--signal))] hover:text-[hsl(var(--paper))]">
@@ -63,7 +73,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-5 font-meta text-[hsl(var(--muted))] md:flex-row md:items-center md:justify-between md:px-10">
           <span>© {new Date().getFullYear()} Paco Martinez · pacomtz.com</span>
-          <span>Design beyond imagination</span>
+          <span>{t('footer.tagline')}</span>
         </div>
       </div>
     </footer>
