@@ -22,9 +22,9 @@ float snoise(vec3 v){
   vec3 l = 1.0 - g;
   vec3 i1 = min(g.xyz, l.zxy);
   vec3 i2 = max(g.xyz, l.zxy);
-  vec3 x1 = x0 - i1 + C.xxx;
-  vec3 x2 = x0 - i2 + C.yyy;
-  vec3 x3 = x0 - D.yyy;
+  vec4 x1 = x0 - i1 + C.xxx;
+  vec4 x2 = x0 - i2 + C.yyy;
+  vec4 x3 = x0 - D.yyy;
   i = mod289(i);
   vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));
   float n_ = 0.142857142857;
@@ -145,8 +145,8 @@ export function HeroScene() {
     group.position.x = 0.9; // sit right of the headline on desktop
     scene.add(group);
     if (window.innerWidth < 768) {
-      group.position.set(0, 0.9, 0);
-      group.scale.setScalar(0.72);
+      group.position.set(0.8, -0.3, 0);
+      group.scale.setScalar(0.55);
     }
 
     // scroll progress across the hero (0 top → 1 hero fully passed)
@@ -174,8 +174,8 @@ export function HeroScene() {
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
       const mobile = window.innerWidth < 768;
-      group.position.set(mobile ? 0 : 0.9, mobile ? 0.9 : 0, 0);
-      group.scale.setScalar(mobile ? 0.72 : 1);
+      group.position.set(mobile ? 0.8 : 0.9, mobile ? -0.3 : 0, 0);
+      group.scale.setScalar(mobile ? 0.55 : 1);
     };
     window.addEventListener('resize', onResize);
 
@@ -194,8 +194,8 @@ export function HeroScene() {
       group.rotation.x = progress * 0.9 + py * 0.12;
       points.rotation.z = reduce ? 0 : t * 0.02;
       camera.position.z = 6 + progress * 2.2;
-      group.position.y = (window.innerWidth < 768 ? 0.9 : 0) - progress * 1.4;
-      mat.opacity = 0.7 - progress * 0.35;
+      group.position.y = (window.innerWidth < 768 ? -0.3 : 0) - progress * 1.4;
+      mat.opacity = (window.innerWidth < 768 ? 0.5 : 0.7) - progress * 0.35;
       pMat.opacity = 0.7 - progress * 0.4;
 
       renderer.render(scene, camera);
@@ -217,7 +217,7 @@ export function HeroScene() {
   return (
     <div
       ref={mountRef}
-      className="pointer-events-none absolute inset-0 -z-0"
+      className="pointer-events-none absolute inset-x-0 top-14 h-[46dvh] md:inset-0 md:h-auto"
       aria-hidden="true"
     />
   );
